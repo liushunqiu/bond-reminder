@@ -59,12 +59,3 @@ jobs:
           name: bond-scan-results-${{ github.run_number }}
           path: bond_result.json
           retention-days: 30
-      
-      - name: 提交结果到仓库（可选）
-        if: success()
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add bond_result.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update bond scan results for $(date +%Y-%m-%d)"
-          git push || echo "No changes to commit or push failed"
