@@ -304,23 +304,14 @@ class BondNotifier:
         with open('bond_result.json', 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
         
-        # 决定是否发送通知
-        should_notify = True
-        
-        # 如果是周末且没有数据，可以选择跳过通知
-        if skip_weekend_notification and not self.is_weekday and len(bonds) == 0:
-            print("\n今天是周末且无可转债申购，跳过通知")
-            should_notify = False
-        
-        # 如果有数据，总是发送通知
-        if len(bonds) > 0:
-            should_notify = True
+        # 决定是否发送通知：只有当有新债可申购时才发送通知
+        should_notify = len(bonds) > 0
         
         # 发送通知
         if should_notify:
             self.send_notifications(message)
         else:
-            print("\n跳过通知发送")
+            print("\n今日无可转债申购，跳过通知发送")
         
         print(f"\n扫描完成！共找到 {len(bonds)} 只可转债")
         return len(bonds)
